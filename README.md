@@ -5,7 +5,7 @@
 
 1. Build the project 
     
-    ````
+    ```
     go build cmd/server/main.go
     ```
 
@@ -14,5 +14,5 @@
     ```
     ./main
     ```
-    
+
 3. Make a `POST` request to `http://localhost:8080/images` with a JPEG file as a `multipart/form-data` body under the name `image`
