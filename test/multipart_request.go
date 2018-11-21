@@ -8,9 +8,9 @@ import (
 	"os"
 )
 
-// NewfileUploadRequest creates a client request to the api of the project
+// NewFileUploadRequest creates a client request to the api of the project
 // with a predetermined file.
-func NewfileUploadRequest(filePath string) (*http.Request, error) {
+func NewFileUploadRequest(filePath string) (*http.Request, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return nil, err

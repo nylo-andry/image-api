@@ -40,7 +40,7 @@ func TestImages_UnsupportedFormat(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	req, err := test.NewfileUploadRequest(filePath)
+	req, err := test.NewFileUploadRequest(filePath)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -63,7 +63,7 @@ func TestImages_AllOk(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	req, err := test.NewfileUploadRequest(filePath)
+	req, err := test.NewFileUploadRequest(filePath)
 	if err != nil {
 		t.Fatal(err)
 	}
