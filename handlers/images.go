@@ -10,7 +10,6 @@ const MaxImageSize = 1 << 7
 
 // Images handles the images modification requests and returns the greyscaled image.
 func (h *Handlers) Images(w http.ResponseWriter, r *http.Request) {
-
 	r.ParseMultipartForm(MaxImageSize)
 	file, _, err := r.FormFile("image")
 	if err != nil {
