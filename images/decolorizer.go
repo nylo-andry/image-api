@@ -5,11 +5,15 @@ import (
 	"image"
 	"image/color"
 	"io"
+	"math"
+	"sync"
 
 	imageapi "github.com/nylo-andry/image-api"
 )
 
 var _ imageapi.ImageService = &ImageService{}
+
+const chunkCount = 50
 
 // ImageService expose the various operations possible on an image.
 type ImageService struct{}
@@ -25,12 +29,34 @@ func (i *ImageService) Decolorize(file io.Reader) (*image.RGBA, error) {
 		return nil, errors.New("Only JPG files are supported")
 	}
 
+	var wg sync.WaitGroup
+	wg.Add(chunkCount)
+
 	size := img.Bounds().Size()
 	rect := image.Rect(0, 0, size.X, size.Y)
+	chunkSize := int(math.Ceil(float64(size.Y / chunkCount)))
 	greyscaledImage := image.NewRGBA(rect)
 
-	for x := 0; x < size.X; x++ {
-		for y := 0; y < size.Y; y++ {
+	for i := 0; i < chunkCount; i++ {
+		start := i * chunkSize
+		end := start + chunkSize
+
+		go func() {
+			processChunk(img, greyscaledImage, start, end)
+			wg.Done()
+		}()
+	}
+
+	wg.Wait()
+
+	return greyscaledImage, nil
+}
+
+func processChunk(img image.Image, dest *image.RGBA, yStart int, yEnd int) {
+	sizeX := img.Bounds().Size().X
+
+	for x := 0; x < sizeX; x++ {
+		for y := yStart; y < yEnd; y++ {
 			pixel := img.At(x, y)
 			originalColor := color.RGBAModel.Convert(pixel).(color.RGBA)
 
@@ -42,9 +68,7 @@ func (i *ImageService) Decolorize(file io.Reader) (*image.RGBA, error) {
 			c := color.RGBA{
 				R: grey, G: grey, B: grey, A: originalColor.A,
 			}
-			greyscaledImage.Set(x, y, c)
+			dest.Set(x, y, c)
 		}
 	}
-
-	return greyscaledImage, nil
 }
