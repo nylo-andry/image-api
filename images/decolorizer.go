@@ -29,6 +29,10 @@ func (i *ImageService) Decolorize(file io.Reader) (*image.RGBA, error) {
 		return nil, errors.New("Only JPG files are supported")
 	}
 
+	return processImage(img), nil
+}
+
+func processImage(img image.Image) *image.RGBA {
 	var wg sync.WaitGroup
 	wg.Add(chunkCount)
 
@@ -49,7 +53,7 @@ func (i *ImageService) Decolorize(file io.Reader) (*image.RGBA, error) {
 
 	wg.Wait()
 
-	return greyscaledImage, nil
+	return greyscaledImage
 }
 
 func processChunk(img image.Image, dest *image.RGBA, yStart int, yEnd int) {
