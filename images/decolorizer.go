@@ -1,10 +1,8 @@
 package images
 
 import (
-	"errors"
 	"image"
 	"image/color"
-	"io"
 	"math"
 	"sync"
 )
@@ -13,19 +11,7 @@ const chunkCount = 50
 
 // Decolorize returns a greyscaled version of an the image received in the params.
 // The only supported image format is JPG.
-func (i *ImageService) Decolorize(file io.Reader) (*image.RGBA, error) {
-	img, format, err := image.Decode(file)
-	if err != nil {
-		return nil, err
-	}
-	if format != "jpeg" {
-		return nil, errors.New("Only JPG files are supported")
-	}
-
-	return processImage(img), nil
-}
-
-func processImage(img image.Image) *image.RGBA {
+func (i *ImageService) Decolorize(img image.Image) *image.RGBA {
 	var wg sync.WaitGroup
 	wg.Add(chunkCount)
 

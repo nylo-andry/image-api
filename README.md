@@ -6,7 +6,7 @@
 1. Build the project 
     
     ```
-    go build cmd/server/main.go
+    make build
     ```
 
 2. Run the server
@@ -15,4 +15,6 @@
     ./main
     ```
 
-3. Make a `POST` request to `http://localhost:8080/images` with a JPEG file as a `multipart/form-data` body under the name `image`
+3. Make a `POST` request to `http://localhost:8080/images/greyscale` with a JPEG file as a `multipart/form-data` body under the name `image`
+
+4. Make a `POST` request to `http://localhost:8080/images/pixelate` with a JPEG file as a `multipart/form-data` body under the name `image`

@@ -4,16 +4,15 @@ import (
 	"bytes"
 	"io"
 	"mime/multipart"
-	"net/http"
 	"os"
 )
 
 // NewFileUploadRequest creates a client request to the api of the project
 // with a predetermined file.
-func NewFileUploadRequest(filePath string) (*http.Request, error) {
+func NewFileUploadRequest(filePath string) (io.Reader, string, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	defer file.Close()
 
@@ -21,16 +20,14 @@ func NewFileUploadRequest(filePath string) (*http.Request, error) {
 	writer := multipart.NewWriter(body)
 	part, err := writer.CreateFormFile("image", ".")
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	_, err = io.Copy(part, file)
 
 	err = writer.Close()
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
-	req, err := http.NewRequest("POST", "/images", body)
-	req.Header.Set("Content-Type", writer.FormDataContentType())
-	return req, err
+	return body, writer.FormDataContentType(), nil
 }

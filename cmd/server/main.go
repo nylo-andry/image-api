@@ -15,8 +15,9 @@ func main() {
 	h := handlers.NewHandlers(logger, &images.ImageService{})
 	r := mux.NewRouter()
 
-	r.HandleFunc("/images/greyscale", h.Logger(h.Greyscale)).Methods("POST")
-	r.HandleFunc("/images/pixelate", h.Logger(h.Pixelate)).Methods("POST")
+	r.HandleFunc("/images/greyscale", h.Greyscale).Methods("POST")
+	r.HandleFunc("/images/pixelate", h.Pixelate).Methods("POST")
+	r.Use(h.Logger, h.MultipartFormMiddleware, h.ImageRequestMiddleware)
 
 	logger.Println("server starting")
 	err := http.ListenAndServe(":3000", r)
