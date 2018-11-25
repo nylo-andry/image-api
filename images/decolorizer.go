@@ -7,16 +7,9 @@ import (
 	"io"
 	"math"
 	"sync"
-
-	imageapi "github.com/nylo-andry/image-api"
 )
 
-var _ imageapi.ImageService = &ImageService{}
-
 const chunkCount = 50
-
-// ImageService expose the various operations possible on an image.
-type ImageService struct{}
 
 // Decolorize returns a greyscaled version of an the image received in the params.
 // The only supported image format is JPG.

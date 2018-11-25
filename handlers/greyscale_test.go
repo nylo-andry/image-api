@@ -15,7 +15,7 @@ import (
 var logger = log.New(os.Stdout, "image-api::", log.Lshortfile)
 var imageService = &images.ImageService{}
 
-func TestImages_NoImage(t *testing.T) {
+func TestGreyscale_NoImage(t *testing.T) {
 	h := NewHandlers(logger, imageService)
 	req, err := http.NewRequest("POST", "/images", nil)
 	if err != nil {
@@ -23,7 +23,7 @@ func TestImages_NoImage(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(h.Images)
+	handler := http.HandlerFunc(h.Greyscale)
 
 	handler.ServeHTTP(rr, req)
 
@@ -46,7 +46,7 @@ func TestImages_UnsupportedFormat(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(h.Images)
+	handler := http.HandlerFunc(h.Greyscale)
 
 	handler.ServeHTTP(rr, req)
 
@@ -69,7 +69,7 @@ func TestImages_AllOk(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(h.Images)
+	handler := http.HandlerFunc(h.Greyscale)
 
 	handler.ServeHTTP(rr, req)
 

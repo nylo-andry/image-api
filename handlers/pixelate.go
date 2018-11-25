@@ -5,12 +5,8 @@ import (
 	"net/http"
 )
 
-// MaxImageSize represents the maximum allowed size of a an images which is 10 MB.
-const MaxImageSize = 1 << 7
-
-// Images handles the images modification requests and returns the greyscaled image.
-func (h *Handlers) Images(w http.ResponseWriter, r *http.Request) {
-	r.ParseMultipartForm(MaxImageSize)
+func (h *Handlers) Pixelate(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(maxImageSize)
 	file, _, err := r.FormFile("image")
 	if err != nil {
 		h.logger.Printf("An error occured while reading the file: %v", err)
@@ -19,7 +15,7 @@ func (h *Handlers) Images(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	img, err := h.ImageService.Decolorize(file)
+	img, err := h.ImageService.Pixelate(file)
 	if err != nil {
 		h.logger.Printf("An error occured while decolorizing the file: %v", err)
 		http.Error(w, "Unsupported file format. Only JPEG files are allowed.", http.StatusBadRequest)
@@ -27,10 +23,4 @@ func (h *Handlers) Images(w http.ResponseWriter, r *http.Request) {
 	}
 
 	jpeg.Encode(w, img, nil)
-}
-
-func check(err error) {
-	if err != nil {
-		panic(err)
-	}
 }
