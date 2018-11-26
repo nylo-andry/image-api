@@ -1,6 +1,5 @@
 # Image API
-> A simple API that takes an image file and returns that same image in black and white.
-
+> A simple API that takes an image file and does stuff
 ## Getting started
 
 1. Build the project 
